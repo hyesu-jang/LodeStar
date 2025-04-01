@@ -6,6 +6,7 @@
   <a href="https://youtu.be/YRMNGUgaGSI?feature=shared"><img src="https://badges.aleen42.com/src/youtube.svg" alt="YouTube" /></a>
   <br />
   <br />
+</div>
 This repository contains the test code for the descriptor in the paper "LodeStar: Maritime Radar Descriptor for Semi-Direct Radar Odometry"
 
 Repo is mainly dealing with the synthesis of descriptor LodeStar and point normal matcher from [CFEAR](https://github.com/dan11003/CFEAR_Radarodometry_code_public.git)
