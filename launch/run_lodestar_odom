@@ -1,0 +1,36 @@
+#!/bin/bash
+
+killall rviz
+current_date=`date '+%Y-%m-%d_%H:%M'`
+
+########### Bagfile Data Name #############
+SEQUENCE="test_sequence3"
+BAG_BASE_PATH="/home/seadronix-hs/ros1_workspace/odom_test"
+
+BAG_FILE_PATH=""${BAG_BASE_PATH}"/${SEQUENCE}.bag"
+echo "${BAG_FILE_PATH}"
+EVAL_BASE_DIR="/home/hs/ros1_workspace/odom_test/${SEQUENCE}"
+est_dir="${EVAL_BASE_DIR}/"
+mkdir -p "${est_dir}"
+
+
+#PARAMETERS for point normar matcher (CFEAR)
+export cost_type="P2P"
+export submap_scan_size="1"
+export registered_min_keyframe_dist="1.5"
+export res="3"
+export zmin="60"
+export weight_option="4"
+export weight_intensity="true"
+export range_resolution="0.05" # for better optimization performance, we first generate small pointcloud and recover the real resolution later.
+export soft_constraint="false"
+export disable_compensate="true"
+
+#LodeStar Parameters
+export radar_topic="/radar_image_inrange"
+export contour_threshold="214" #If you want to use radar from pohang canal dataset, you should change source code(RCS Inversion required)
+export k_nearest="20"
+
+pars="--range-res ${range_resolution} --sequence ${SEQUENCE} --soft_constraint ${soft_constraint} --disable_compensate ${disable_compensate} --cost_type ${cost_type} --submap_scan_size ${submap_scan_size} --registered_min_keyframe_dist ${registered_min_keyframe_dist} --res ${res} --bag_path "${BAG_FILE_PATH}" --est_directory "${est_dir}" --job_nr 1 --z-min ${zmin} --weight_option ${weight_option} --weight_intensity ${weight_intensity} --dataset marine --radar_topic ${radar_topic} --contour_threshold ${contour_threshold} --k_nearest ${k_nearest}"
+roslaunch lodestar_odometry vis.launch&
+rosrun lodestar_odometry lodestar_odom ${pars} #>/dev/null
